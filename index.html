@@ -13,13 +13,16 @@
       <input type="text" id="code" placeholder="Code utilisateur" required />
       <input type="password" id="motdepasse" placeholder="Mot de passe" required />
       <button type="submit">Se connecter</button>
-      <p id="errorMessage"></p>
-    </form>
-  </div>
 
   <script src="script.js"></script>
   <button id="testBtn">Tester webhook Make</button>
   <pre id="result"></pre>
+      
+      <p id="errorMessage"></p>
+    </form>
+  </div>
+
+
 
   <script>
     document.getElementById("testBtn").addEventListener("click", async () => {
@@ -37,5 +40,7 @@
       }
     });
   </script>
+
+  
 </body>
 </html>
