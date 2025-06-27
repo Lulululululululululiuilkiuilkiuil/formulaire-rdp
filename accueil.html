@@ -1,119 +1,38 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Formulaire Accueil</title>
-<style>
-  body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: #f0f4f8;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-  }
-  form {
-    background: white;
-    padding: 2rem;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgb(0 0 0 / 0.1);
-    width: 100%;
-    max-width: 450px;
-  }
-  h2 {
-    margin-bottom: 1rem;
-    text-align: center;
-    color: #333;
-  }
-  label {
-    font-weight: 600;
-    color: #555;
-  }
-  .input-group {
-    margin-bottom: 1.5rem;
-  }
-  input[type="text"][readonly] {
-    background: #eee;
-    border: 1px solid #ddd;
-    padding: 0.5rem;
-    width: 100%;
-    border-radius: 4px;
-    font-size: 1rem;
-  }
-  .options {
-    margin-top: 0.5rem;
-  }
-  .option-label {
-    display: block;
-    margin-bottom: 0.4rem;
-    cursor: pointer;
-    user-select: none;
-  }
-  input[type="radio"], input[type="checkbox"] {
-    margin-right: 0.5rem;
-  }
-  button {
-    background-color: #0078d7;
-    color: white;
-    padding: 0.75rem;
-    border: none;
-    border-radius: 4px;
-    width: 100%;
-    font-size: 1.1rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  button:hover {
-    background-color: #005ea2;
-  }
-  #message {
-    margin-top: 1rem;
-    text-align: center;
-    font-weight: 600;
-  }
-  #message.success {
-    color: green;
-  }
-  #message.error {
-    color: red;
-  }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Page d'accueil</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <h1>Bienvenue !</h1>
+
   <form id="responseForm">
-    <h2>Votre réponse</h2>
+    <input type="hidden" id="code" name="code" value="" />
 
-    <div class="input-group">
-      <label for="code">Code utilisateur</label>
-      <input type="text" id="code" name="code" readonly />
-    </div>
+    <label for="question1">Question 1 (choix unique) :</label>
+    <select name="question1" id="question1" required>
+      <option value="">--Choisissez une option--</option>
+      <option value="Option 1">Option 1</option>
+      <option value="Option 2">Option 2</option>
+      <option value="Option 3">Option 3</option>
+    </select>
 
-    <div class="input-group">
-      <label>Question 1 (choix unique)</label>
-      <div class="options">
-        <label class="option-label"><input type="radio" name="question1" value="Option 1" required /> Option 1</label>
-        <label class="option-label"><input type="radio" name="question1" value="Option 2" /> Option 2</label>
-        <label class="option-label"><input type="radio" name="question1" value="Option 3" /> Option 3</label>
-      </div>
-    </div>
+    <fieldset>
+      <legend>Question 2 (choix multiples) :</legend>
+      <label><input type="checkbox" name="question2" value="Option A" /> Option A</label>
+      <label><input type="checkbox" name="question2" value="Option B" /> Option B</label>
+      <label><input type="checkbox" name="question2" value="Option C" /> Option C</label>
+      <label><input type="checkbox" name="question2" value="Option D" /> Option D</label>
+    </fieldset>
 
-    <div class="input-group">
-      <label>Question 2 (plusieurs choix possibles)</label>
-      <div class="options">
-        <label class="option-label"><input type="checkbox" name="question2" value="Choix A" /> Choix A</label>
-        <label class="option-label"><input type="checkbox" name="question2" value="Choix B" /> Choix B</label>
-        <label class="option-label"><input type="checkbox" name="question2" value="Choix C" /> Choix C</label>
-        <label class="option-label"><input type="checkbox" name="question2" value="Choix D" /> Choix D</label>
-      </div>
-    </div>
-
-    <button type="submit">Envoyer</button>
-    <div id="message"></div>
+    <button type="submit" id="submitBtn">Envoyer</button>
   </form>
 
-  <script src="script.js"></script>
+  <div id="message"></div>
 
+  <script src="script.js"></script>
 </body>
 </html>
