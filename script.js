@@ -4,11 +4,6 @@ document.getElementById("loginForm").addEventListener("submit", async function (
   const code = document.getElementById("code").value.trim();
   const motdepasse = document.getElementById("motdepasse").value.trim();
   const errorMessage = document.getElementById("errorMessage");
-  const submitBtn = document.getElementById("submitBtn");
-
-  errorMessage.textContent = "";
-  submitBtn.disabled = true;
-  submitBtn.textContent = "Connexion en cours...";
 
   try {
     const response = await fetch("https://hook.eu2.make.com/4tyg6naz87yxkd1bb754qw5sbh0ct6x3", {
@@ -17,14 +12,7 @@ document.getElementById("loginForm").addEventListener("submit", async function (
       body: JSON.stringify({ code, motdepasse })
     });
 
-    if (!response.ok) {
-      // Si le serveur répond mais avec un statut HTTP erreur
-      throw new Error(`Erreur HTTP: ${response.status}`);
-    }
-
     const data = await response.json();
-
-    console.log("Réponse reçue :", data);
 
     if (data.success === true) {
       window.location.href = "accueil.html";
@@ -33,9 +21,6 @@ document.getElementById("loginForm").addEventListener("submit", async function (
     }
   } catch (error) {
     errorMessage.textContent = "Erreur serveur. Réessayez plus tard.";
-    console.error("Erreur détaillée :", error);
-  } finally {
-    submitBtn.disabled = false;
-    submitBtn.textContent = "Se connecter";
+    console.error("Erreur:", error);
   }
 });
