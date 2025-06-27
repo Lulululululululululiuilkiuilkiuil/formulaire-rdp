@@ -2,37 +2,29 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Page d'accueil</title>
+  <title>Accueil</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>Bienvenue !</h1>
+  <div class="login-container">
+    <h1>Questionnaire</h1>
+    <form id="responseForm">
+      <input type="hidden" id="code" name="code" />
+      <p>1. Quel est votre fruit préféré ?</p>
+      <label><input type="radio" name="question1" value="Pomme" required /> Pomme</label><br/>
+      <label><input type="radio" name="question1" value="Banane" /> Banane</label><br/>
+      <label><input type="radio" name="question1" value="Fraise" /> Fraise</label><br/>
 
-  <form id="responseForm">
-    <input type="hidden" id="code" name="code" value="" />
+      <p>2. Quelles sont vos couleurs préférées ?</p>
+      <label><input type="checkbox" name="question2" value="Rouge" /> Rouge</label><br/>
+      <label><input type="checkbox" name="question2" value="Bleu" /> Bleu</label><br/>
+      <label><input type="checkbox" name="question2" value="Vert" /> Vert</label><br/>
+      <label><input type="checkbox" name="question2" value="Jaune" /> Jaune</label><br/>
 
-    <label for="question1">Question 1 (choix unique) :</label>
-    <select name="question1" id="question1" required>
-      <option value="">--Choisissez une option--</option>
-      <option value="Option 1">Option 1</option>
-      <option value="Option 2">Option 2</option>
-      <option value="Option 3">Option 3</option>
-    </select>
-
-    <fieldset>
-      <legend>Question 2 (choix multiples) :</legend>
-      <label><input type="checkbox" name="question2" value="Option A" /> Option A</label>
-      <label><input type="checkbox" name="question2" value="Option B" /> Option B</label>
-      <label><input type="checkbox" name="question2" value="Option C" /> Option C</label>
-      <label><input type="checkbox" name="question2" value="Option D" /> Option D</label>
-    </fieldset>
-
-    <button type="submit" id="submitBtn">Envoyer</button>
-  </form>
-
-  <div id="message"></div>
-
+      <button type="submit">Envoyer</button>
+      <p id="message"></p>
+    </form>
+  </div>
   <script src="script.js"></script>
 </body>
 </html>

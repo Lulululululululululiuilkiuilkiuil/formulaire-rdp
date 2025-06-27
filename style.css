@@ -1,108 +1,45 @@
-/* style.css */
-
 body {
   font-family: Arial, sans-serif;
-  background-color: #f7f9fc;
+  background-color: #f0f0f0;
   margin: 0;
   padding: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  color: #333;
 }
 
-.login-container, form {
+.login-container {
+  width: 90%;
+  max-width: 400px;
+  margin: 50px auto;
   background: white;
-  padding: 30px 40px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgb(0 0 0 / 0.1);
-  width: 320px;
-}
-
-h2, h1 {
-  text-align: center;
-  margin-bottom: 20px;
-  color: #222;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
 input[type="text"],
-input[type="password"],
-select {
+input[type="password"] {
   width: 100%;
-  padding: 10px 12px;
-  margin-bottom: 15px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 14px;
+  padding: 10px;
+  margin: 10px 0;
   box-sizing: border-box;
-  transition: border-color 0.2s ease-in-out;
-}
-
-input[type="text"]:focus,
-input[type="password"]:focus,
-select:focus {
-  border-color: #007bff;
-  outline: none;
-}
-
-fieldset {
-  border: 1px solid #ddd;
-  padding: 10px 15px;
-  margin-bottom: 15px;
-  border-radius: 5px;
-}
-
-legend {
-  font-weight: bold;
-  padding: 0 5px;
-}
-
-label {
-  display: block;
-  margin-bottom: 8px;
-  cursor: pointer;
-  font-size: 14px;
 }
 
 button {
   width: 100%;
-  background-color: #007bff;
-  border: none;
+  padding: 10px;
+  background-color: #4CAF50;
   color: white;
-  font-weight: bold;
-  padding: 12px 0;
+  border: none;
   border-radius: 5px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-button:hover:not(:disabled) {
-  background-color: #0056b3;
 }
 
 button:disabled {
-  background-color: #aaa;
-  cursor: not-allowed;
+  background-color: #9E9E9E;
 }
 
-#errorMessage,
-#message {
-  margin-top: 10px;
-  text-align: center;
-  font-weight: bold;
-  font-size: 14px;
+p.success {
+  color: green;
 }
 
-#errorMessage {
-  color: #d9534f;
-}
-
-.success {
-  color: #28a745;
-}
-
-.error {
-  color: #d9534f;
+p.error {
+  color: red;
 }
