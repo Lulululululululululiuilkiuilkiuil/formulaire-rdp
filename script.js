@@ -4,6 +4,11 @@ document.getElementById("loginForm").addEventListener("submit", async function (
   const code = document.getElementById("code").value.trim();
   const motdepasse = document.getElementById("motdepasse").value.trim();
   const errorMessage = document.getElementById("errorMessage");
+  const submitBtn = document.getElementById("submitBtn");
+
+  errorMessage.textContent = "";
+  submitBtn.disabled = true;
+  submitBtn.textContent = "Connexion en cours...";
 
   try {
     const response = await fetch("https://hook.eu2.make.com/4tyg6naz87yxkd1bb754qw5sbh0ct6x3", {
@@ -22,5 +27,8 @@ document.getElementById("loginForm").addEventListener("submit", async function (
   } catch (error) {
     errorMessage.textContent = "Erreur serveur. Réessayez plus tard.";
     console.error("Erreur:", error);
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = "Se connecter";
   }
 });
