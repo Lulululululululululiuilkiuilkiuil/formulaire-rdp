@@ -113,59 +113,7 @@
     <div id="message"></div>
   </form>
 
-  <script>
-    // Récupérer code utilisateur depuis URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const userCode = urlParams.get('code') || '';
-    document.getElementById('code').value = userCode;
+  <script src="script.js"></script>
 
-    const form = document.getElementById('responseForm');
-    const messageDiv = document.getElementById('message');
-    const submitBtn = form.querySelector('button[type="submit"]');
-
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-
-      messageDiv.textContent = '';
-      messageDiv.className = '';
-      submitBtn.disabled = true;
-      submitBtn.textContent = 'Envoi en cours...';
-
-      // Récupérer valeur question 1 (radio)
-      const q1 = form.question1.value;
-
-      // Récupérer valeurs question 2 (checkboxes)
-      const q2checks = [...form.querySelectorAll('input[name="question2"]:checked')];
-      const q2 = q2checks.map(input => input.value).join(', ');  // ex: "Choix A, Choix C"
-
-      const data = {
-        code: userCode,
-        question1: q1,
-        question2: q2
-      };
-
-      try {
-        const response = await fetch('https://hook.eu2.make.com/TON_WEBHOOK_ICI', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data)
-        });
-
-        if (!response.ok) throw new Error(`Erreur HTTP : ${response.status}`);
-
-        messageDiv.textContent = 'Réponse envoyée avec succès !';
-        messageDiv.className = 'success';
-        form.reset();
-        document.getElementById('code').value = userCode; // remets code après reset
-      } catch (error) {
-        console.error(error);
-        messageDiv.textContent = 'Erreur lors de l\'envoi, veuillez réessayer.';
-        messageDiv.className = 'error';
-      } finally {
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'Envoyer';
-      }
-    });
-  </script>
 </body>
 </html>
