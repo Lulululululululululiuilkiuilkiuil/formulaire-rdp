@@ -65,7 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
       };
 
       try {
-        const response = await fetch("https://hook.eu2.make.com/TON_WEBHOOK_ICI", {
+        const response = await fetch("https://hook.eu2.make.com/oxl1za6zyxqct9t738fs5aijp2wuw43c", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(data)
