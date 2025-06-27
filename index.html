@@ -18,5 +18,24 @@
   </div>
 
   <script src="script.js"></script>
+  <button id="testBtn">Tester webhook Make</button>
+  <pre id="result"></pre>
+
+  <script>
+    document.getElementById("testBtn").addEventListener("click", async () => {
+      const resultEl = document.getElementById("result");
+      try {
+        const response = await fetch("https://hook.eu2.make.com/4tyg6naz87yxkd1bb754qw5sbh0ct6x3", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ code: "test", motdepasse: "test" })
+        });
+        const text = await response.text();
+        resultEl.textContent = `Status: ${response.status}\nRéponse:\n${text}`;
+      } catch (err) {
+        resultEl.textContent = `Erreur: ${err.message}`;
+      }
+    });
+  </script>
 </body>
 </html>
