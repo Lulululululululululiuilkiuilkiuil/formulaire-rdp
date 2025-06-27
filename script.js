@@ -17,7 +17,14 @@ document.getElementById("loginForm").addEventListener("submit", async function (
       body: JSON.stringify({ code, motdepasse })
     });
 
+    if (!response.ok) {
+      // Si le serveur répond mais avec un statut HTTP erreur
+      throw new Error(`Erreur HTTP: ${response.status}`);
+    }
+
     const data = await response.json();
+
+    console.log("Réponse reçue :", data);
 
     if (data.success === true) {
       window.location.href = "accueil.html";
@@ -26,7 +33,7 @@ document.getElementById("loginForm").addEventListener("submit", async function (
     }
   } catch (error) {
     errorMessage.textContent = "Erreur serveur. Réessayez plus tard.";
-    console.error("Erreur:", error);
+    console.error("Erreur détaillée :", error);
   } finally {
     submitBtn.disabled = false;
     submitBtn.textContent = "Se connecter";
