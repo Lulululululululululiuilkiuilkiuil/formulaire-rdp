@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
       submitBtn.textContent = "Connexion...";
 
       try {
-        const response = await fetch("https://hook.eu2.make.com/oxl1za6zyxqct9t738fs5aijp2wuw43c", {
+        const response = await fetch("https://hook.eu2.make.com/4tyg6naz87yxkd1bb754qw5sbh0ct6x3", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ code, motdepasse })
@@ -65,7 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
       };
 
       try {
-        const response = await fetch("https://hook.eu2.make.com/4tyg6naz87yxkd1bb754qw5sbh0ct6x3", {
+        const response = await fetch("https://hook.eu2.make.com/oxl1za6zyxqct9t738fs5aijp2wuw43c", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(data)
