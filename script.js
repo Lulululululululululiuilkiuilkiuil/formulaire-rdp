@@ -1,6 +1,16 @@
 document.addEventListener("DOMContentLoaded", () => {
   const path = window.location.pathname;
 
+  // Fonction de redirection vers la page de connexion si pas authentifié
+  function redirectIfNotLoggedIn() {
+    const code = localStorage.getItem("userCode");
+    if (!code) {
+      window.location.href = "index.html";
+    }
+    return code;
+  }
+
+  // --- Page de connexion ---
   if (path.includes("index.html") || path === "/" || path.endsWith("/")) {
     const form = document.getElementById("loginForm");
     if (!form) return;
@@ -26,7 +36,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const data = await response.json();
         if (data.success === true) {
-          window.location.href = "accueil.html?code=" + encodeURIComponent(code);
+          localStorage.setItem("userCode", code);
+          window.location.href = "accueil.html";
         } else {
           errorMessage.textContent = "Identifiants incorrects.";
         }
@@ -38,30 +49,40 @@ document.addEventListener("DOMContentLoaded", () => {
         submitBtn.textContent = "Se connecter";
       }
     });
-  } else if (path.includes("accueil.html")) {
-    const urlParams = new URLSearchParams(window.location.search);
-    const userCode = urlParams.get("code") || "";
-    const codeInput = document.getElementById("code");
-    if (codeInput) {
-      codeInput.value = userCode;
-    }
+  }
 
+  // --- Page d'accueil / questionnaire ---
+  else if (path.includes("accueil.html")) {
+    const userCode = redirectIfNotLoggedIn();
     const form = document.getElementById("responseForm");
     const messageDiv = document.getElementById("message");
+
+    const allowedQ1 = ["Pomme", "Banane", "Fraise"];
+    const allowedQ2 = ["Rouge", "Bleu", "Vert", "Jaune"];
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
 
-      messageDiv.textContent = "";
-      messageDiv.className = "";
-
       const q1 = form.question1.value;
-      const q2 = [...form.querySelectorAll('input[name="question2"]:checked')].map(el => el.value).join(", ");
+      const selectedQ2 = [...form.querySelectorAll('input[name="question2"]:checked')].map(el => el.value);
+
+      // Validation stricte
+      if (!allowedQ1.includes(q1)) {
+        messageDiv.textContent = "Réponse invalide pour la question 1.";
+        messageDiv.className = "error";
+        return;
+      }
+
+      if (!selectedQ2.every(val => allowedQ2.includes(val))) {
+        messageDiv.textContent = "Réponse invalide pour la question 2.";
+        messageDiv.className = "error";
+        return;
+      }
 
       const data = {
         code: userCode,
         question1: q1,
-        question2: q2
+        question2: selectedQ2.join(", ")
       };
 
       try {
@@ -76,7 +97,6 @@ document.addEventListener("DOMContentLoaded", () => {
         messageDiv.textContent = "Réponse envoyée avec succès !";
         messageDiv.className = "success";
         form.reset();
-        codeInput.value = userCode;
       } catch (err) {
         messageDiv.textContent = "Erreur lors de l'envoi. Réessayez.";
         messageDiv.className = "error";
