@@ -3,19 +3,112 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Connexion</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>Connexion au questionnaire RPS-DU</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #0078d7, #00b4d8);
+      height: 100vh;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #333;
+    }
+    .login-box {
+      background: white;
+      border-radius: 12px;
+      padding: 30px;
+      width: 320px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      text-align: center;
+    }
+    h2 {
+      margin-bottom: 20px;
+      color: #0078d7;
+    }
+    input {
+      width: 90%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      text-align: center;
+    }
+    button {
+      background-color: #0078d7;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 10px 20px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover {
+      background-color: #005ea6;
+    }
+    p {
+      color: red;
+      margin-top: 10px;
+      height: 18px;
+    }
+  </style>
 </head>
 <body>
-  <div class="login-container">
-    <h2>Connexion</h2>
-    <form id="loginForm">
-      <input type="text" id="code" placeholder="Code utilisateur" required />
-      <input type="password" id="motdepasse" placeholder="Mot de passe" required />
-      <button type="submit" id="submitBtn">Se connecter</button>
-      <p id="errorMessage"></p>
-    </form>
+  <div class="login-box">
+    <h2>Connexion au formulaire RPS-DU</h2>
+    <input type="text" id="code" placeholder="Entrez votre code unique" />
+    <button onclick="verifierCode()">Accéder</button>
+    <p id="message"></p>
   </div>
-  <script src="script.js"></script>
+
+  <script>
+    const FORM_URL = "https://forms.office.com/Pages/ResponsePage.aspx?id=ubYqTlKuj0uiHMaGpDEjuL3Khzo--jZEpWsfCWFKgi9UMjFWRUU2V045VTlZOVRQWk8wTTVCSjFLVi4u";
+    const CSV_FILE = "codes.csv";
+
+    async function verifierCode() {
+      const input = document.getElementById("code").value.trim().toLowerCase();
+      const message = document.getElementById("message");
+
+      if (!input) {
+        message.textContent = "Veuillez entrer un code.";
+        return;
+      }
+
+      // Si le code est déjà utilisé localement
+      if (localStorage.getItem("used_" + input)) {
+        message.textContent = "Ce code a déjà été utilisé.";
+        return;
+      }
+
+      try {
+        const response = await fetch(CSV_FILE);
+        const text = await response.text();
+
+        // Gère le format avec point-virgule
+        const lignes = text.trim().split("\n").slice(1);
+        let codeValide = false;
+
+        for (const ligne of lignes) {
+          const [code, used] = ligne.split(";");
+          if (code && code.trim().toLowerCase() === input && used.trim().toUpperCase() === "FALSE") {
+            codeValide = true;
+            break;
+          }
+        }
+
+        if (codeValide) {
+          // Marque comme utilisé (stockage local)
+          localStorage.setItem("used_" + input, "true");
+          window.location.href = FORM_URL;
+        } else {
+          message.textContent = "Code invalide ou déjà utilisé.";
+        }
+      } catch (e) {
+        message.textContent = "Erreur : impossible de lire le fichier CSV.";
+        console.error(e);
+      }
+    }
+  </script>
 </body>
 </html>
