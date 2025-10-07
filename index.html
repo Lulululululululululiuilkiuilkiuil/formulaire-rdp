@@ -1,114 +1,78 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Connexion au questionnaire RPS-DU</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(135deg, #0078d7, #00b4d8);
-      height: 100vh;
-      margin: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #333;
-    }
-    .login-box {
-      background: white;
-      border-radius: 12px;
-      padding: 30px;
-      width: 320px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-      text-align: center;
-    }
-    h2 {
-      margin-bottom: 20px;
-      color: #0078d7;
-    }
-    input {
-      width: 90%;
-      padding: 10px;
-      margin: 10px 0;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-      text-align: center;
-    }
-    button {
-      background-color: #0078d7;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      padding: 10px 20px;
-      cursor: pointer;
-      font-size: 16px;
-    }
-    button:hover {
-      background-color: #005ea6;
-    }
-    p {
-      color: red;
-      margin-top: 10px;
-      height: 18px;
-    }
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Accès formulaire RPS-DU - connexion</title>
+<style>
+  body{font-family:Inter,Segoe UI,Arial;background:#f3f7fb;display:flex;align-items:center;justify-content:center;height:100vh;margin:0}
+  .card{background:#fff;padding:28px;border-radius:10px;box-shadow:0 8px 30px rgba(0,0,0,0.08);width:360px;text-align:center}
+  h1{font-size:18px;color:#0b5fa5;margin:0 0 12px}
+  input{width:100%;padding:10px;border:1px solid #d1dbe8;border-radius:6px;margin:8px 0;font-size:15px}
+  button{background:#0b5fa5;color:#fff;border:none;padding:10px 16px;border-radius:6px;cursor:pointer;font-size:15px;width:100%}
+  .msg{height:18px;margin-top:10px;color:#c0392b;font-size:14px}
+  .ok{color:green}
+  .small{font-size:13px;color:#666;margin-top:8px}
+</style>
 </head>
 <body>
-  <div class="login-box">
-    <h2>Connexion au formulaire RPS-DU</h2>
-    <input type="text" id="code" placeholder="Entrez votre code unique" />
-    <button onclick="verifierCode()">Accéder</button>
-    <p id="message"></p>
+  <div class="card">
+    <h1>Accéder au questionnaire RPS-DU</h1>
+    <input id="code" placeholder="Entrez votre code unique" autocomplete="off" />
+    <button id="submitBtn">Valider et ouvrir le formulaire</button>
+    <div id="msg" class="msg"></div>
+    <div class="small">Le code ne peut être utilisé qu'une seule fois.</div>
   </div>
 
-  <script>
-    const FORM_URL = "https://forms.office.com/Pages/ResponsePage.aspx?id=ubYqTlKuj0uiHMaGpDEjuL3Khzo--jZEpWsfCWFKgi9UMjFWRUU2V045VTlZOVRQWk8wTTVCSjFLVi4u";
-    const CSV_FILE = "codes.csv";
+<script>
+const ENDPOINT = "verify_code.php"; // point d'appel PHP
+const FORM_URL = "https://forms.office.com/Pages/ResponsePage.aspx?id=ubYqTlKuj0uiHMaGpDEjuL3Khzo--jZEpWsfCWFKgi9UMjFWRUU2V045VTlZOVRQWk8wTTVCSjFLVi4u";
 
-    async function verifierCode() {
-      const input = document.getElementById("code").value.trim().toLowerCase();
-      const message = document.getElementById("message");
+document.getElementById('submitBtn').addEventListener('click', submitCode);
+document.getElementById('code').addEventListener('keydown', e => { if(e.key === 'Enter') submitCode(); });
 
-      if (!input) {
-        message.textContent = "Veuillez entrer un code.";
-        return;
-      }
+async function submitCode(){
+  const codeEl = document.getElementById('code');
+  const msgEl = document.getElementById('msg');
+  const code = (codeEl.value || "").trim();
+  msgEl.classList.remove('ok');
+  msgEl.textContent = "";
 
-      // Si le code est déjà utilisé localement
-      if (localStorage.getItem("used_" + input)) {
-        message.textContent = "Ce code a déjà été utilisé.";
-        return;
-      }
+  if (!code) { msgEl.textContent = "Veuillez saisir votre code."; return; }
 
-      try {
-        const response = await fetch(CSV_FILE);
-        const text = await response.text();
+  try {
+    // Envoi au serveur
+    const form = new URLSearchParams();
+    form.append('code', code);
 
-        // Gère le format avec point-virgule
-        const lignes = text.trim().split("\n").slice(1);
-        let codeValide = false;
+    const resp = await fetch(ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: form.toString()
+    });
+    const data = await resp.json();
 
-        for (const ligne of lignes) {
-          const [code, used] = ligne.split(";");
-          if (code && code.trim().toLowerCase() === input && used.trim().toUpperCase() === "FALSE") {
-            codeValide = true;
-            break;
-          }
-        }
-
-        if (codeValide) {
-          // Marque comme utilisé (stockage local)
-          localStorage.setItem("used_" + input, "true");
-          window.location.href = FORM_URL;
-        } else {
-          message.textContent = "Code invalide ou déjà utilisé.";
-        }
-      } catch (e) {
-        message.textContent = "Erreur : impossible de lire le fichier CSV.";
-        console.error(e);
-      }
+    if (!resp.ok) {
+      msgEl.textContent = data.message || "Erreur serveur.";
+      return;
     }
-  </script>
+
+    if (data.success) {
+      // Succès : on redirige vers le formulaire
+      msgEl.textContent = "Code validé. Redirection…";
+      msgEl.classList.add('ok');
+      // délai court pour que l'utilisateur voie le message
+      setTimeout(() => { window.location.href = FORM_URL; }, 600);
+    } else {
+      // échec (code inconnu ou déjà utilisé)
+      msgEl.textContent = data.message || "Code invalide.";
+    }
+
+  } catch (err) {
+    console.error(err);
+    msgEl.textContent = "Impossible de contacter le serveur.";
+  }
+}
+</script>
 </body>
 </html>
